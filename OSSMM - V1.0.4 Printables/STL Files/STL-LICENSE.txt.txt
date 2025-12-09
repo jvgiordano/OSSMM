@@ -1,0 +1,15 @@
+OSSMM - 3D Printable Hardware Components
+Copyright (C) 2022-2025 Maynooth University
+Developed by Jonny Giordano at Hamilton Institute, Maynooth University
+
+HARDWARE LICENSE: CERN-OHL-S v2 (CERN Open Hardware License - Strongly Reciprocal)
+
+These 3D design files are licensed under the CERN Open Hardware License 
+Version 2 - Strongly Reciprocal.
+
+You may use, modify, and manufacture products based on these designs, but if 
+you distribute modified designs or manufacture products for distribution, you 
+must make your complete design documentation available under the same 
+CERN-OHL-S v2 license.
+
+Full license text: See LICENSE-HARDWARE.txt or visit https://ohwr.org/cern_ohl_s_v2.txt

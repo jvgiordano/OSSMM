@@ -1,0 +1,12 @@
+OSSMM - Android Application
+Copyright (C) 2022-2025 Maynooth University
+
+Primary Developer:
+Jonny Giordano
+Hamilton Institute, Maynooth University
+
+Developed as part of doctoral research with funding from Taighde Éireann – 
+Research Ireland (Grant 18/CRT/6049).
+
+Licensed under the GNU General Public License version 3 or later.
+See LICENSE file for complete terms.

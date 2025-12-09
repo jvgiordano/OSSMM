@@ -49,16 +49,15 @@ feature_row:
 
 <br>
 <figure style="text-align: center; display: block; margin-left: auto; margin-right: auto;">
-  <div style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; gap: 20px;">
+  <div style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; gap: 40px;">
     <div style="margin: 0; width: 250px; display: flex; flex-direction: column; align-items: center;">
       <img src="{{ site.url }}/OSSMM/media/home/Maynooth.png" style="width: 100%;">
     </div>
-    <div style="margin: 0; width: 400px; display: flex; flex-direction: column; align-items: center;">
+    <div style="margin: 0; width: 475px; display: flex; flex-direction: column; align-items: center;">
       <img src="{{ site.url }}/OSSMM/media/home/SFI_DataScience.jpeg" style="width: 100%;">
     </div>
   </div>
 </figure>
-<br>
 
 This project emanated from research conducted at Maynooth University with the 
 financial support of Taighde Éireann – Research Ireland under Grant numbers 
