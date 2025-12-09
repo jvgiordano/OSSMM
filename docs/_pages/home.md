@@ -12,7 +12,7 @@ excerpt: >
   <small><a href="https://github.com/jvgiordano/OSSMM">Latest release v1.0.4</a></small>
 
 intro:
-  - excerpt: "OSSMM breaks down the cost barriers in sleep research by providing researchers and enthusiasts with an affordable, accurate, and fully open-source platform for both sleep monitoring and modulation experiments. Build your own system for under €60."
+  - excerpt: "OSSMM breaks down the cost barriers in sleep research by providing researchers and enthusiasts with an affordable and fully open-source platform for both sleep monitoring and modulation experiments. Build your own system for under €60."
 
 feature_row:
   - image_path: /media/home/quick-intro.jpg
@@ -49,12 +49,12 @@ feature_row:
 
 <br>
 <figure style="text-align: center; display: block; margin-left: auto; margin-right: auto;">
-  <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: flex-start;">
-    <div style="margin: 0; width: 48%; display: flex; flex-direction: column; align-items: center;">
+  <div style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; gap: 30px;">
+    <div style="margin: 0; display: flex; flex-direction: column; align-items: center;">
       <img src="{{ site.url }}/OSSMM/media/home/Maynooth.png" style="width: 50%;">
     </div>
-    <div style="margin: 0; width: 48%; display: flex; flex-direction: column; align-items: center;">
-      <img src="{{ site.url }}/OSSMM/media/home/SFI_DataScience.jpeg" style="width: 60%;">
+    <div style="margin: 0; display: flex; flex-direction: column; align-items: center;">
+      <img src="{{ site.url }}/OSSMM/media/home/SFI_DataScience.jpeg" style="width: 75%;">
     </div>
   </div>
 </figure>
