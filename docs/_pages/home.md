@@ -41,6 +41,28 @@ feature_row:
 
 ---
 
+## Funding and Support
+
+<br>
+<figure style="text-align: center; display: block; margin-left: auto; margin-right: auto;">
+  <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: flex-start;">
+    <div style="margin: 0; width: 48%; display: flex; flex-direction: column; align-items: center;">
+      <img src="{{ site.url }}/OSSMM/media/home/Maynooth.png" style="width: 100%;">
+    </div>
+    <div style="margin: 0; width: 48%; display: flex; flex-direction: column; align-items: center;">
+      <img src="{{ site.url }}/OSSMM/media/home/SFI_DataScience.jpeg" style="width: 100%;">
+    </div>
+  </div>
+</figure>
+<br>
+
+This project emanated from research conducted at Maynooth University with the 
+financial support of Taighde Éireann – Research Ireland under Grant numbers 
+18/CRT/6049. The opinions, findings, and conclusions or recommendations 
+expressed in this material are those of the author and do not necessarily 
+reflect the views of the Research Ireland.
+
+
 {% include feature_row id="intro" type="center" %}
 
 {% include feature_row %}
