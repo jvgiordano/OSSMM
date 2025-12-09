@@ -1,97 +1,292 @@
 // lib/main.dart
 
+import 'dart:io';
+import 'dart:convert';
+import 'dart:async'; // <-- needed for Timer
+
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart' as fbp;
 import 'package:provider/provider.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart' as fbp;
+import 'package:flutter_foreground_task/flutter_foreground_task.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
+import 'package:location/location.dart' as loc;
+
+// Adjust these import paths if your project structure differs.
 import 'package:ossmm/src/core/services/bluetooth_service.dart';
 import 'package:ossmm/src/core/services/location_service.dart';
-import 'package:ossmm/src/features/system_requirements/screens/system_requirements_screen.dart';
 import 'package:ossmm/src/features/home/screens/home_screen.dart';
+import 'package:ossmm/src/features/system_requirements/screens/system_requirements_screen.dart';
 
-// Add this line for global navigation context
+// Keep navigator key if you use it elsewhere
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-void main() {
+// ===== Foreground Task setup (v9.x) =====
+
+@pragma('vm:entry-point')
+void startCallback() {
+  FlutterForegroundTask.setTaskHandler(_OssmmTaskHandler());
+}
+
+class _OssmmTaskHandler extends TaskHandler {
+  DateTime? _startedAt;
+
+  @override
+  Future<void> onStart(DateTime ts, TaskStarter starter) async {
+    _startedAt = ts;
+    await FlutterForegroundTask.updateService(
+      notificationTitle: 'OSSMM Recording Active',
+      notificationText: 'Recording sensor data...',
+    );
+  }
+
+  @override
+  void onRepeatEvent(DateTime ts) {
+    if (_startedAt == null) return;
+    final secs = ts.difference(_startedAt!).inSeconds;
+    final mm = (secs ~/ 60).toString().padLeft(2, '0');
+    final ss = (secs % 60).toString().padLeft(2, '0');
+
+    FlutterForegroundTask.updateService(
+      notificationText: 'Recording • $mm:$ss',
+    );
+  }
+
+  @override
+  Future<void> onDestroy(DateTime timestamp, bool isTimeout) async {
+    // Optional cleanup; keeping it empty is fine.
+  }
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  FlutterForegroundTask.initCommunicationPort();
+  _initializeForegroundService();
+
   fbp.FlutterBluePlus.setLogLevel(fbp.LogLevel.info, color: true);
 
   runApp(
-    // Use MultiProvider to provide both services
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => OssmmBluetoothService()),
-        ChangeNotifierProvider(create: (context) => LocationService()),
+        ChangeNotifierProvider(create: (_) => OssmmBluetoothService()),
+        ChangeNotifierProvider(create: (_) => LocationService()),
       ],
-      child: const OssmmApp(),
+      child: const _OssmmApp(),
     ),
   );
 }
 
-class OssmmApp extends StatefulWidget {
-  const OssmmApp({super.key});
+void _initializeForegroundService() {
+  FlutterForegroundTask.init(
+    androidNotificationOptions: AndroidNotificationOptions(
+      channelId: 'ossmm_recording_service',
+      channelName: 'OSSMM Recording Service',
+      channelDescription: 'Maintains BLE connection and records sensor data',
+      onlyAlertOnce: true,
+    ),
+    iosNotificationOptions: IOSNotificationOptions(
+      showNotification: true,
+      playSound: false,
+    ),
+    foregroundTaskOptions: ForegroundTaskOptions(
+      eventAction: ForegroundTaskEventAction.repeat(5000),
+      autoRunOnBoot: false,
+      allowWakeLock: true,
+      allowWifiLock: true,
+    ),
+  );
 
-  @override
-  State<OssmmApp> createState() => _OssmmAppState();
+  if (Platform.isAndroid) {
+    () async {
+      final perm = await FlutterForegroundTask.checkNotificationPermission();
+      if (perm != NotificationPermission.granted) {
+        await FlutterForegroundTask.requestNotificationPermission();
+      }
+      if (!await FlutterForegroundTask.isIgnoringBatteryOptimizations) {
+        await FlutterForegroundTask.requestIgnoreBatteryOptimization();
+      }
+    }();
+  }
 }
 
-class _OssmmAppState extends State<OssmmApp> with WidgetsBindingObserver {
+// ===== App widget =====
+
+class _OssmmApp extends StatefulWidget {
+  const _OssmmApp({Key? key}) : super(key: key);
+
+  @override
+  State<_OssmmApp> createState() => _OssmmAppState();
+}
+
+class _OssmmAppState extends State<_OssmmApp> with WidgetsBindingObserver {
   late LocationService _locationService;
+  late OssmmBluetoothService _bluetoothService;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    // Store reference to location service
-    _locationService = Provider.of<LocationService>(context, listen: false);
+
+    _locationService = context.read<LocationService>();
+    _bluetoothService = context.read<OssmmBluetoothService>();
+
+    _bluetoothService.setForegroundServiceCallbacks(
+      onStartRecording: _startForegroundService,
+      onStopRecording: _stopForegroundService,
+    );
+
+    FlutterForegroundTask.addTaskDataCallback(_onReceiveTaskData);
   }
 
   @override
   void dispose() {
+    FlutterForegroundTask.removeTaskDataCallback(_onReceiveTaskData);
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
+  void _onReceiveTaskData(Object data) {
+    try {
+      final map = (data is String)
+          ? jsonDecode(data) as Map<String, dynamic>
+          : (data as Map).cast<String, dynamic>();
+
+      final action = map['action'] as String?;
+      if (action == 'buttonPressed' && map['buttonId'] == 'stop') {
+        _bluetoothService.stopRecording(saveData: true);
+      }
+    } catch (_) {}
+  }
+
+  Future<void> _startForegroundService() async {
+    try {
+      await WakelockPlus.enable();
+
+      if (await FlutterForegroundTask.isRunningService) {
+        await FlutterForegroundTask.updateService(
+          notificationTitle: 'OSSMM Recording Active',
+          notificationText: 'Recording sensor data...',
+        );
+      } else {
+        await FlutterForegroundTask.startService(
+          serviceTypes: const [
+            ForegroundServiceTypes.connectedDevice,
+            ForegroundServiceTypes.dataSync,
+          ],
+          serviceId: 256,
+          notificationTitle: 'OSSMM Recording Active',
+          notificationText: 'Recording started — Tap to open app',
+          notificationButtons: [
+            NotificationButton(id: 'stop', text: 'Stop Recording'),
+          ],
+          callback: startCallback,
+        );
+      }
+    } catch (e) {
+      debugPrint('[Main] Exception starting FGS: $e');
+    }
+  }
+
+  Future<void> _stopForegroundService() async {
+    try {
+      await WakelockPlus.disable();
+      await FlutterForegroundTask.stopService();
+    } catch (e) {
+      debugPrint('[Main] Exception stopping FGS: $e');
+    }
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    // When app comes to foreground, force check location status
     if (state == AppLifecycleState.resumed) {
       _locationService.forceCheck();
+      _bluetoothService.setAppLifecycleState(true);
+    } else if (state == AppLifecycleState.paused) {
+      _bluetoothService.setAppLifecycleState(false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: navigatorKey,
-      title: 'OSSMM App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        useMaterial3: true,
+    // THEME UNCHANGED: classic Material 2 look.
+    return WithForegroundTask(
+      child: MaterialApp(
+        navigatorKey: navigatorKey,
+        title: 'OSSMM App',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const _RootShell(), // <- pure conditional render (no nav stack)
+        debugShowCheckedModeBanner: false,
       ),
-      home: const SystemRequirementsChecker(),
     );
   }
 }
 
-// Separate widget to handle navigation logic
-class SystemRequirementsChecker extends StatelessWidget {
-  const SystemRequirementsChecker({super.key});
+// ===== Pure conditional shell (no navigation) =====
+/// Root shell that renders exactly two screens:
+/// - HomeScreen when Bluetooth ON && Location ON
+/// - SystemRequirementsScreen otherwise
+/// No navigation stack tricks.
+class _RootShell extends StatefulWidget {
+  const _RootShell({Key? key}) : super(key: key);
+
+  @override
+  State<_RootShell> createState() => _RootShellState();
+}
+
+class _RootShellState extends State<_RootShell> with WidgetsBindingObserver {
+  final loc.Location _locPlugin = loc.Location();
+  bool _pluginLocationOn = false;
+  Timer? _poll;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _refreshLocation();
+    // Poll service state so toggling Location is detected reliably
+    _poll = Timer.periodic(const Duration(seconds: 1), (_) => _refreshLocation());
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _poll?.cancel();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _refreshLocation();
+    }
+  }
+
+  Future<void> _refreshLocation() async {
+    try {
+      final on = await _locPlugin.serviceEnabled(); // read-only; no prompts
+      if (!mounted) return;
+      if (on != _pluginLocationOn) {
+        setState(() => _pluginLocationOn = on);
+      }
+    } catch (_) {
+      // If the plugin throws for any reason, we leave the old value.
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<OssmmBluetoothService, LocationService>(
-      builder: (context, bluetoothService, locationService, child) {
-        // Check if both requirements are met
-        bool bluetoothEnabled = bluetoothService.adapterState == fbp.BluetoothAdapterState.on;
-        bool locationEnabled = locationService.isLocationEnabled;
+    // We rely on your Bluetooth provider for adapter state.
+    return Consumer<OssmmBluetoothService>(
+      builder: (context, bt, _) {
+        final bluetoothOn = bt.adapterState == fbp.BluetoothAdapterState.on;
 
-        print("System check - Bluetooth: $bluetoothEnabled, Location: $locationEnabled");
-
-        // Only navigate to HomeScreen if BOTH are enabled
-        if (bluetoothEnabled && locationEnabled) {
-          return const HomeScreen();
+        // EXACTLY TWO STATES:
+        if (bluetoothOn && _pluginLocationOn) {
+          return const HomeScreen(); // main page
         } else {
-          // Show system requirements screen if either is disabled
-          return const SystemRequirementsScreen();
+          return const SystemRequirementsScreen(); // requirements page
         }
       },
     );
