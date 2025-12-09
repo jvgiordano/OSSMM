@@ -41,6 +41,10 @@ feature_row:
 
 ---
 
+{% include feature_row id="intro" type="center" %}
+
+{% include feature_row %}
+
 ## Funding and Support
 
 <br>
@@ -62,10 +66,6 @@ financial support of Taighde Éireann – Research Ireland under Grant numbers
 expressed in this material are those of the author and do not necessarily 
 reflect the views of the Research Ireland.
 
-
-{% include feature_row id="intro" type="center" %}
-
-{% include feature_row %}
 
 ---
 *Current Version: V1.0.4*
