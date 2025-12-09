@@ -51,10 +51,10 @@ feature_row:
 <figure style="text-align: center; display: block; margin-left: auto; margin-right: auto;">
   <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: flex-start;">
     <div style="margin: 0; width: 48%; display: flex; flex-direction: column; align-items: center;">
-      <img src="{{ site.url }}/OSSMM/media/home/Maynooth.png" style="width: 100%;">
+      <img src="{{ site.url }}/OSSMM/media/home/Maynooth.png" style="width: 50%;">
     </div>
     <div style="margin: 0; width: 48%; display: flex; flex-direction: column; align-items: center;">
-      <img src="{{ site.url }}/OSSMM/media/home/SFI_DataScience.jpeg" style="width: 100%;">
+      <img src="{{ site.url }}/OSSMM/media/home/SFI_DataScience.jpeg" style="width: 60%;">
     </div>
   </div>
 </figure>
