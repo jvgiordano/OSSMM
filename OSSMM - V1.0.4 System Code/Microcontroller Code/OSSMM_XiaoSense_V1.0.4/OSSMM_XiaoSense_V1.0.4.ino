@@ -1,9 +1,32 @@
 /*
+ * OSSMM - Open-Source Sleep Monitor and Modulator
+ * Copyright (C) 2022-2025 Maynooth University
+ *
+ * Developed by Jonny Giordano at the Hamilton Institute, Maynooth University
+ * with funding from Taighde Éireann – Research Ireland (Grant 18/CRT/6049).
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/*
 *******************************************************************************
-  Notes:
-  Program: OSSMM V1.0.4
+  Project: OSSMM V1.0.4
   By: Jonny Giordano
 
+
+  Development History: 
+  
   Created: Friday July 15th, 2022
   Switch to M5StickC-Plus: Tuesday June 21st, 2022
   Switch to Adafruit Feather Sense: Friday October 25th, 2022
@@ -34,7 +57,11 @@
   - Enabled the POW characteristic to shut-off the MCU
   seperately from losing BLE connection. So, now reconnection
   attempts are back.
-  - BLE is now AES encrypted, 
+  - BLE is now AES encrypted
+
+  Acknowledgements:
+  - BLE optimization inspired by Souichirou Kikuchi's M5StickC BLE project
+  - LSM6DS3 library modifications for Seeed Xiao Sense are by Github user 'aovestdipaperino'
   
 
 *******************************************************************************

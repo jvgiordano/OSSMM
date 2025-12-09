@@ -1,0 +1,30 @@
+OSSMM - Open-Source Sleep Monitor and Modulator
+Copyright (C) 2022-2025 Maynooth University
+
+Primary Developer and Author:
+Jonny Giordano
+Hamilton Institute, Maynooth University
+Maynooth, County Kildare, Ireland
+
+This project was developed as part of doctoral research at the Hamilton 
+Institute, Maynooth University, with financial support from Taighde Éireann – 
+Research Ireland under Grant number 18/CRT/6049.
+
+The opinions, findings, and conclusions or recommendations expressed in this 
+software are those of the author and do not necessarily reflect the views of 
+Taighde Éireann – Research Ireland or Maynooth University.
+
+This software is licensed under the GNU General Public License version 3 or 
+later. See the LICENSE file for the complete license text.
+
+Third-Party Components:
+This project includes modified versions of library files from the Arduino 
+LSM6DS3 library, which are copyright Arduino SA and licensed under the GNU 
+Lesser General Public License version 2.1 or later. These files retain their 
+original copyright notices and licensing.
+
+Acknowledgments:
+- BLE transmission optimization inspired by Souichirou Kikuchi's M5StickC 
+  BLE project
+- LSM6DS3 library modifications for Seeed Xiao Sense by GitHub user 
+  'aovestdipaperino'

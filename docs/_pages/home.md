@@ -66,6 +66,16 @@ financial support of Taighde Éireann – Research Ireland under Grant numbers
 expressed in this material are those of the author and do not necessarily 
 reflect the views of the Research Ireland.
 
+---
+
+## Citation
+
+OSSMM was developed by Jonny Giordano at the Hamilton Institute, Maynooth University as part of doctoral research funded by Taighde Éireann – Research Ireland (Grant 18/CRT/6049).
+
+If you use OSSMM in your research, please cite:
+
+Giordano, J. (2025). OSSMM: Open-Source Sleep Monitor and Modulator. 
+Maynooth University. https://github.com/jvgiordano/OSSMM
 
 ---
 *Current Version: V1.0.4*
