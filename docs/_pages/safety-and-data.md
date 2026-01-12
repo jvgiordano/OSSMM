@@ -40,9 +40,7 @@ OSSMM was designed with data protection in mind. The Android 15+ version feature
 
 * **Secure BLE connection**: The app-to-device BLE connection requires 
 verification of 3 unique UUIDs before data transmission occurs. The new version
-of the app implements Bluetooth bonding, preventing "Man In The Middle" (MITM)
-attacks during reconnection and ensures only previously authorized devices can
-pair.
+of the app implements Bluetooth "Just Works" bonding.
 
 * **User-customizable security**: Each user can modify the UUID values to 
 create their own unique security "profile".
