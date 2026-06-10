@@ -10,7 +10,7 @@ toc_sticky: true
 
 # Welcome to OSSMM!
 
-**OSSMM** (Open-Source Sleep Monitor and Modulator) is, to our knowledge, the first fully open-source wearable — open hardware and open software — that is purpose-built and for both sleep monitoring and modulation. Earlier open-source efforts combined the two, but depended on commercial headbands or general-purpose EEG research platforms rather than a self-contained, low-cost device.
+**OSSMM** (Open-Source Sleep Monitor and Modulator) is, to our knowledge, the first fully open-source wearable — open hardware and open software — that is purpose-built for both sleep monitoring and modulation. Earlier open-source efforts combined the two, but depended on commercial headbands or general-purpose EEG research platforms rather than a self-contained, low-cost device.
 
 <br>
 # Who is it for?
