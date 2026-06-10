@@ -101,7 +101,7 @@ print times.
 
 * **Reusable silicone wet-dry electrodes** - no conductive gel needed
 * **Quick-change parts** - easy repair and hygiene
-* **Battery powered with no exposed wiring** - 15+ hour run-time
+* **Battery powered with no exposed wiring** - 23+ hour run-time
 * **Fully open-source hardware designs and software code**
   - Complete access for researcher modifications
   - Full transparency of sleep staging algorithms and hardware code
@@ -138,10 +138,10 @@ Android application. Only Android is supported at this time.
 
 ## Technical Specifications:
 
-* **Dimensions: 79.1 x 45.2 x 30 mm**  (3.12 x 1.78 x 1.18 in)
-* **Weight: 76.5 grams** ( or 2.7 ounces with a 150 mAh battery)
+* **Dimensions: 79.1 x 47.2 x 31 mm**  (3.12 x 1.86 x 1.22 in)
+* **Weight: 76.6 grams** ( or 2.7 ounces with a 200 mAh battery)
 * **Sampling Frequency: +250 Hz** ( 500MB of data per 8 hour recording)
-* **Battery: 120-220 mAh** (est. 15-27+ hour run time, sleep monitoring only)
+* **Battery: 120-220 mAh** (est. 15-25+ hour run time, sleep monitoring only)
 
 ## Physiological Measurements:
 
