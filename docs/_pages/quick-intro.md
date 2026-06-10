@@ -24,7 +24,7 @@ Building your own OSSMM requires some basic-to-moderate electronics and
 know, and a detailed Build Guide for assembling your own.
 
 This is a great starter project for electronics and 3D printing. For first time
-builders with basic background knowledge, assembly should take 4-5 hours for
+builders with basic background knowledge, assembly should take 4-6 hours for
 the first unit. Those who are experienced can easily assemble a unit in under 2 
 hours.
 
